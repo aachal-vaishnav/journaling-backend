@@ -2,8 +2,7 @@
 
 **Java 21 · Spring Boot 3.4 · MySQL · Redis · JWT · Prometheus/Grafana**
 
-A production-grade journaling API built following SDLC standards — designed to demonstrate
-senior-backend engineering practices for the 2026 job market.
+A production-grade journaling API built following SDLC standards — designed to demonstrate backend engineering practices.
 
 ---
 
@@ -180,28 +179,3 @@ curl "http://localhost:8080/api/entries?search=production&page=1&limit=10" \
 curl http://localhost:8080/api/analytics/dashboard \
   -H "Authorization: Bearer $TOKEN"
 ```
-
----
-
-## Resume Talking Points
-
-- **"Increased concurrent request handling by 35–45%** by migrating to Java 21 Virtual Threads
-  (`spring.threads.virtual.enabled=true`), eliminating thread-blocking on all I/O-heavy endpoints."
-
-- **"Reduced API response times by ~80%** using Redis caching (`@Cacheable` with per-cache TTL)
-  and JPA Query Optimization (`@EntityGraph` Join Fetch) to eliminate N+1 database bottlenecks."
-
-- **"Implemented MySQL FULLTEXT search** (`MATCH...AGAINST`) replacing `LIKE` queries,
-  achieving index-backed retrieval across millions of entries."
-
-- **"Architected a modular backend supporting 1,000+ concurrent users** with automated
-  health monitoring via Micrometer, Prometheus, and Grafana dashboards."
-
-- **"Applied Zero-Trust security principles** — stateless JWT, BCrypt-12 hashing,
-  per-request token validation with no server-side session state."
-
-- **"Used Java Records for all DTOs** to eliminate boilerplate, enforce immutability,
-  and align with modern Java 16+ idioms."
-
-- **"Wrote asynchronous analytics tasks** with `@Async` on virtual-thread executor —
-  mood insights and cache warming run post-response without blocking the caller."
