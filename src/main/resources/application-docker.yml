@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:mysql://mysql:3306/journaling_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: ${MYSQL_USER:journaling_user}
+    password: ${MYSQL_PASSWORD:journaling_pass}
+
+  data:
+    redis:
+      host: redis
+      port: 6379
+
+  sql:
+    init:
+      mode: always
+
+app:
+  jwt:
+    jwt:
+      secret: ${JWT_SECRET:mZ7lW8yKQ3xv9F2nR4pJcU6dA0tYbE1sHqG5VzXwLkI=}
+
+logging:
+  level:
+    root: INFO
+    com.journaling: INFO

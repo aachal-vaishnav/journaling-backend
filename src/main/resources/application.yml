@@ -1,0 +1,99 @@
+spring:
+  application:
+    name: journaling-backend
+
+  # ── Virtual Threads (Java 21 Project Loom) ──────────────────────────────
+  threads:
+    virtual:
+      enabled: true   # Replaces platform threads for Tomcat + @Async workers
+
+  # ── MySQL ────────────────────────────────────────────────────────────────
+  datasource:
+    url: jdbc:mysql://localhost:3306/journaling_db?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+    username: journaling_user
+    password: journaling_pass
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  # ── JPA / Hibernate ─────────────────────────────────────────────────────
+  jpa:
+    hibernate:
+      ddl-auto: validate        # Use schema.sql for DDL; Hibernate validates only
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: false
+        default_batch_fetch_size: 20  # Batch-fetch to reduce N+1 load
+    open-in-view: false         # Disable OSIV — no lazy-load outside service
+
+  # ── Schema initialisation ────────────────────────────────────────────────
+  sql:
+    init:
+      mode: always              # Run schema.sql on every startup (idempotent DDL)
+      schema-locations: classpath:db/schema.sql
+
+  # ── Redis ────────────────────────────────────────────────────────────────
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 2000ms
+      lettuce:
+        pool:
+          max-active: 10
+          max-idle: 5
+          min-idle: 2
+
+  # ── Cache ────────────────────────────────────────────────────────────────
+  cache:
+    type: redis
+    redis:
+      time-to-live: 300000    # 5 minutes default TTL (milliseconds)
+      cache-null-values: false
+
+# ── JWT ──────────────────────────────────────────────────────────────────
+app:
+  jwt:
+    secret: mZ7lW8yKQ3xv9F2nR4pJcU6dA0tYbE1sHqG5VzXwLkI=
+    expiration-ms: 604800000  # 7 days
+
+# ── Server ───────────────────────────────────────────────────────────────
+server:
+  port: 8080
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html
+    min-response-size: 1024
+
+# ── Actuator + Prometheus ────────────────────────────────────────────────
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+    prometheus:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+# ── Logging ──────────────────────────────────────────────────────────────
+logging:
+  level:
+    root: INFO
+    com.journaling: DEBUG
+    org.springframework.security: WARN
+    org.hibernate.SQL: WARN
