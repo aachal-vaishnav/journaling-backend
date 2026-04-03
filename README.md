@@ -1,7 +1,6 @@
 # High-Performance Journaling Backend
 
-**Java 21 · Spring Boot 3.4 · MySQL · Redis · JWT · Prometheus/Grafana**
-
+**Java 21 · Spring Boot 3.4 · MySQL · Redis · JWT**
 A production-grade journaling API built following SDLC standards — designed to demonstrate
 senior-backend engineering practices for the 2026 job market.
 
